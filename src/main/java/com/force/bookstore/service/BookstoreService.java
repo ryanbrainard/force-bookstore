@@ -24,35 +24,26 @@ public class BookstoreService {
 
     @Transactional(readOnly = true)
     public Book findBook(String id) {
-        if ("new".equals(id)) {
-            return new Book();
-        } else {
-            return em.find(Book.class, id);
-        }
+        return em.find(Book.class, id);
     }
 
     @Transactional
-    public Book save(Book book) {
-        if (book.getId() != null) {
-            book = em.merge(book);
-        } else {
-            em.persist(book);
-        }
-        logger.info("book saved: " + em);
-
-        return book;
-    }
-
-    @Transactional
-    public Author save(Author author) {
-        if (author.getId() != null) {
-            author = em.merge(author);
-        } else {
-            em.persist(author);
-        }
-        logger.info("author saved: " + em);
-
+    public Author findAuthor(String id) {
+        final Author author = em.find(Author.class, id);
+        author.getBooks(); // calling inside tx to load
         return author;
+    }
+
+    @Transactional
+    public <P extends Persistable> P save(P persistable) {
+        if (persistable.getId() != null) {
+            persistable = em.merge(persistable);
+        } else {
+            em.persist(persistable);
+        }
+        logger.info("saved: " + em);
+
+        return persistable;
     }
 
     @Transactional
@@ -66,5 +57,4 @@ public class BookstoreService {
         em.remove(book);
         return true;
     }
-
 }

@@ -5,6 +5,7 @@ import com.force.bookstore.model.Book;
 import com.force.bookstore.service.BookstoreService;
 import com.force.bookstore.service.Persistable;
 import com.force.sdk.connector.ForceServiceConnector;
+import com.google.common.collect.Sets;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/app-context.xml")
@@ -38,22 +38,22 @@ public class BookstoreCrudTest {
         author.setFirstName(authorFirstName);
         author.setLastName(authorLastName);
         bookstore.save(author);
-        assertNotNull(author.getId());
-//        assertEquals(title1,  bookstore.findBook(author.getId()).getTitle());
 
         final Book book1 = register(new Book());
         book1.setAuthor(author);
         book1.setTitle(title1);
         bookstore.save(book1);
-        assertNotNull(book1.getId());
-        assertEquals(title1,  bookstore.findBook(book1.getId()).getTitle());
 
         final Book book2 = register(new Book());
         book2.setAuthor(author);
         book2.setTitle(title2);
         bookstore.save(book2);
-        assertNotNull(book2.getId());
-        assertEquals(title2, bookstore.findBook(book2.getId()).getTitle());
+
+        final Author persistedAuthor = bookstore.findAuthor(author.getId());
+        assertEquals(authorFirstName, persistedAuthor.getFirstName());
+        assertEquals(authorLastName, persistedAuthor.getLastName());
+        assertEquals(null, persistedAuthor.getBirthDate());
+        assertEquals(Sets.newHashSet(book1, book2), persistedAuthor.getBooks());
     }
 
     @After

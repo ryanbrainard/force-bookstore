@@ -4,7 +4,7 @@ import com.force.bookstore.service.Persistable;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author rbrainard
@@ -20,13 +20,13 @@ public class Author implements Persistable {
     private Date birthDate;
 
     @OneToMany(mappedBy = "author")
-    private List<Book> books;
+    private Set<Book> books;
 
-    public List<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
