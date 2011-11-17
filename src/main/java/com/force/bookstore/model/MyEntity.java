@@ -1,12 +1,14 @@
 package com.force.bookstore.model;
 
+import com.force.bookstore.service.Persistable;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Entity;
 
 @Entity
-public class MyEntity {
+public class MyEntity implements Persistable {
 
 	// The Force.com JPA provider only supports annotating fields. Don't annotate
 	// the getter and setter properties below.

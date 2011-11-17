@@ -9,18 +9,23 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+          <root url="file://$MODULE_DIR$/src/test/java" />
+        </sourceRoots>
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
-    <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/target" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/test-annotations" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -51,16 +56,16 @@
     <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.6.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:3.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:3.0.5.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.force.sdk:force-springsecurity:22.0.3-BETA" level="project" />
+    <orderEntry type="library" name="Maven: com.force.sdk:force-springsecurity:22.0.7-BETA" level="project" />
     <orderEntry type="library" name="Maven: com.force.api:force-partner-api:22.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.force.api:force-wsc:22.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: rhino:js:1.7R2" level="project" />
-    <orderEntry type="library" name="Maven: com.force.sdk:force-connector:22.0.3-BETA" level="project" />
+    <orderEntry type="library" name="Maven: com.force.sdk:force-connector:22.0.7-BETA" level="project" />
     <orderEntry type="library" name="Maven: com.force.api:force-metadata-api:22.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.force.sdk:force-oauth:22.0.3-BETA" level="project" />
+    <orderEntry type="library" name="Maven: com.force.sdk:force-oauth:22.0.7-BETA" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.force.sdk:force-jpa:22.0.3-BETA" level="project" />
+    <orderEntry type="library" name="Maven: com.force.sdk:force-jpa:22.0.7-BETA" level="project" />
     <orderEntry type="library" name="Maven: javax.jdo:jdo2-api:2.3-eb" level="project" />
     <orderEntry type="library" name="Maven: javax.transaction:transaction-api:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-jpa_2.0_spec:1.0" level="project" />

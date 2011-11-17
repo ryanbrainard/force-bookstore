@@ -1,90 +1,57 @@
 package com.force.bookstore;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import javax.inject.Inject;
-
+import com.force.bookstore.model.MyEntity;
+import com.force.bookstore.service.MyEntityService;
+import com.force.sdk.connector.ForceServiceConnector;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.force.sdk.connector.ForceServiceConnector;
-import com.force.bookstore.model.MyEntity;
-import com.force.bookstore.service.EntityService;
-import com.sforce.ws.ConnectionException;
+import javax.inject.Inject;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/app-context.xml")
 public class BasicCRUDIT {
 
-	@Inject
-	private EntityService entityService;
-	
-	@Inject
-	private ForceServiceConnector connector;
-	
-	@Test
-	public void testEntityCRUD() {
-		
-		String entityId = null;
+    @Inject
+//    private AbstractEntityService<MyEntity> entityService;
+    private MyEntityService entityService;
 
-		try {
-			// This little trick turns on traces for both the connector *and* the
-			// entity manager because they share the same underlying connection object.
-			// When trace is on, you'll see the SOAP requests and responses on stdout.
-			connector.getConnection().getConfig().setTraceMessage(true);
-			connector.getConnection().getConfig().setPrettyPrintXml(true);
+    @Inject
+    private ForceServiceConnector connector;
 
-			MyEntity entity = new MyEntity();
-			entity.setName("A Test Entity");
+    @Test
+    public void testEntityCRUD() throws Exception {
 
-			entityService.save(entity);
-			
-			assertNotNull(entity.getId());
-			entityId = entity.getId();
+        String entityId = null;
 
-			entity = entityService.findEntity(entityId);
-			
-			assertEquals("A Test Entity", entity.getName());
-			
-			entity.setName("A Modified Test Entity");
-			
-			entityService.save(entity);
+        try {
+            MyEntity entity = new MyEntity();
+            entity.setName("A Test Entity");
 
-			entity = entityService.findEntity(entityId);
-			
-			assertEquals("A Modified Test Entity",entity.getName());
+            entityService.save(entity);
+            assertNotNull(entity.getId());
 
-			entityService.delete(entityId);
-			
-			entity = entityService.findEntity(entityId);
-			
-			assertNull(entity);
-			
-			// In case the entity is not null, the finally block will try to clean up using
-			// the native connection
-			if(entity==null) entityId = null;
-			
+            entityId = entity.getId();
+            entity = entityService.findEntity(entityId);
+            assertEquals("A Test Entity", entity.getName());
 
-		} catch (ConnectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			if(entityId!=null) {
-				try {
-					
-					connector.getConnection().delete(new String[] {entityId });
-				} catch (ConnectionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-	}
+            entity.setName("A Modified Test Entity");
+            entityService.save(entity);
+            entity = entityService.findEntity(entityId);
+            assertEquals("A Modified Test Entity", entity.getName());
 
+            entityService.delete(entityId);
+            entity = entityService.findEntity(entityId);
+            assertNull(entity);
+            entityId = null;
+        } finally {
+            if (entityId != null) {
+                connector.getConnection().delete(new String[]{entityId});
+            }
+        }
+    }
 }

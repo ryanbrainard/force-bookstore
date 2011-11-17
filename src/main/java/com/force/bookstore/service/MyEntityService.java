@@ -1,19 +1,18 @@
 package com.force.bookstore.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import com.force.bookstore.model.MyEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.force.bookstore.model.MyEntity;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Service
-public class EntityService {
+public class MyEntityService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(EntityService.class);
+	private static final Logger logger = LoggerFactory.getLogger(MyEntityService.class);
 	
 	@PersistenceContext
 	EntityManager em;

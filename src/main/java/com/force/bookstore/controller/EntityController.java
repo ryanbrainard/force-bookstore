@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.force.bookstore.model.MyEntity;
-import com.force.bookstore.service.EntityService;
+import com.force.bookstore.service.MyEntityService;
 
 /**
  * Handles requests for the application home page.
@@ -23,7 +23,7 @@ public class EntityController {
 	private static final Logger logger = LoggerFactory.getLogger(EntityController.class);
 
 	@Inject
-	EntityService entityService;
+    MyEntityService entityService;
 	
 	@ModelAttribute("entity")
 	public MyEntity init(@PathVariable String id) {
