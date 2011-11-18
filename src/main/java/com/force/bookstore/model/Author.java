@@ -1,6 +1,7 @@
 package com.force.bookstore.model;
 
 import com.force.bookstore.service.Persistable;
+import com.force.sdk.jpa.annotation.CustomField;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,9 +13,16 @@ import java.util.Set;
 @Entity
 public class Author implements Persistable {
 
+    @Transient private boolean posLoadHookCalled;
+    @Transient private boolean prePersistCalled;
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
 	private String id;
+
+    @CustomField(externalId = true)
+    private String authorUniversalId;
+
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -60,5 +68,34 @@ public class Author implements Persistable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAuthorUniversalId() {
+        return authorUniversalId;
+    }
+
+    public void setAuthorUniversalId(String authorUniversalId) {
+        this.authorUniversalId = authorUniversalId;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        prePersistCalled = true;
+        System.out.println("PRE PERSIST CALLBACK ON AUTHOR");
+    }
+
+
+    @PostLoad
+    public void postLoad() {
+        posLoadHookCalled = true;
+        System.out.println("POST LOAD CALLBACK ON AUTHOR");
+    }
+
+    public boolean wasPrePersistHookCalled() {
+        return prePersistCalled;
+    }
+
+    public boolean wasPostLoadHookCalled() {
+        return posLoadHookCalled;
     }
 }

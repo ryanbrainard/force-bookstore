@@ -19,6 +19,7 @@
 			<property name="datanucleus.cache.level2.type" value="none" />
 			<property name="datanucleus.detachAllOnCommit" value="true" />
 			<property name="datanucleus.copyOnAttach" value="false" />
+			<property name="force.AllOrNothing" value="true" />
 
 		</properties>
 	</persistence-unit>

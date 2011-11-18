@@ -10,8 +10,13 @@ import javax.persistence.*;
 @Entity
 public class Book implements Persistable {
 
+    @Transient
+    private boolean postLoadHookCalled;
+    @Transient
+    private boolean prePersistCalled;
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String title;
@@ -43,6 +48,19 @@ public class Book implements Persistable {
         this.id = id;
     }
 
+    @PrePersist
+    public void prePersist() {
+        prePersistCalled = true;
+        System.out.println("PRE PERSIST CALLBACK ON BOOK");
+    }
+
+
+    @PostLoad
+    public void postLoad() {
+        postLoadHookCalled = true;
+        System.out.println("POST LOAD CALLBACK ON BOOK");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,5 +85,13 @@ public class Book implements Persistable {
                 ", title='" + title + '\'' +
                 ", author=" + author +
                 '}';
+    }
+
+    public boolean wasPrePersistHookCalled() {
+        return prePersistCalled;
+    }
+
+    public boolean wasPostLoadHookCalled() {
+        return postLoadHookCalled;
     }
 }
