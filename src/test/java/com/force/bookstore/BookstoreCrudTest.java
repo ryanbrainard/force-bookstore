@@ -128,7 +128,7 @@ public class BookstoreCrudTest {
     }
 
     @Test
-    public void testBookPostLoadHook_IndirectlyLoadBookViaAuthor() throws Exception {
+    public void testBookPostLoadHook_IndirectlyLoadBookViaAuthor_WithService() throws Exception {
         final Author author = register(new Author());
         bookstore.save(author);
 
@@ -139,17 +139,47 @@ public class BookstoreCrudTest {
         final Author directlyLoadedAuthor = bookstore.findAuthor(author.getId());
         assertTrue(directlyLoadedAuthor.wasPostLoadHookCalled());
         assertTrue(directlyLoadedAuthor.getBooks().iterator().next().wasPostLoadHookCalled());
-
-//        txCall(new Callable<Void>() {
-//            @Override
-//            public Void call() throws Exception {
-//                final Author directlyLoadedAuthor = txFind(Author.class, author.getId());
-//                assertTrue(directlyLoadedAuthor.wasPostLoadHookCalled());
-//                assertTrue(directlyLoadedAuthor.getBooks().iterator().next().wasPostLoadHookCalled());
-//                return null;
-//            }
-//        });
     }
+
+    @Test
+    public void testBookPostLoadHook_IndirectlyLoadBookViaAuthor_WithCallable() throws Exception {
+        final Author author = register(new Author());
+        bookstore.save(author);
+
+        final Book book = register(new Book());
+        book.setAuthor(author);
+        bookstore.save(book);
+
+        txCall(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                final Author directlyLoadedAuthor = txFind(Author.class, author.getId());
+                assertTrue(directlyLoadedAuthor.wasPostLoadHookCalled());
+                assertTrue(directlyLoadedAuthor.getBooks().iterator().next().wasPostLoadHookCalled());
+                return null;
+            }
+        });
+    }
+
+    @Test
+    public void testBookPostLoadHook_IndirectlyLoadBookViaAuthor_PrivateTransactionMethod() throws Exception {
+        final Author author = register(new Author());
+        bookstore.save(author);
+
+        final Book book = register(new Book());
+        book.setAuthor(author);
+        bookstore.save(book);
+
+        txFindAndAssert(author);
+    }
+
+    @Transactional
+    private void txFindAndAssert(Author author) {
+        final Author directlyLoadedAuthor = txFind(Author.class, author.getId());
+        assertTrue(directlyLoadedAuthor.wasPostLoadHookCalled());
+        assertTrue(directlyLoadedAuthor.getBooks().iterator().next().wasPostLoadHookCalled());
+    }
+
 
     @Transactional
     public <T> T txFind(Class<T> entityClass, Object primaryKey) {
