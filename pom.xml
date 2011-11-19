@@ -17,6 +17,20 @@
 
 	<dependencies>
 
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.6.4.Final</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.7</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -15,17 +15,17 @@ public class MyEntity implements Persistable {
 	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private String id;
+	private Integer id;
     
 	private String name;
 
 	// TODO: Add additional commented-out sample fields
 	
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

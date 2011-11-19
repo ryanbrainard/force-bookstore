@@ -27,7 +27,7 @@ public class BookCrudTest {
         final String title1 = "Gone with the Wind";
         final String title2 = title1 + " Part 2";
 
-        String bookId = null;
+        Integer bookId = null;
 
         try {
             Book book = new Book();
@@ -49,9 +49,9 @@ public class BookCrudTest {
             assertNull(book);
             bookId = null;
         } finally {
-            if (bookId != null) {
-                connector.getConnection().delete(new String[]{bookId});
-            }
+//            if (bookId != null) {
+//                connector.getConnection().delete(new Integer[]{bookId});
+//            }
         }
     }
 }

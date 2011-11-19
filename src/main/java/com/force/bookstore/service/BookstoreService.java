@@ -23,12 +23,12 @@ public class BookstoreService {
     }
 
     @Transactional(readOnly = true)
-    public Book findBook(String id) {
+    public Book findBook(Integer id) {
         return em.find(Book.class, id);
     }
 
     @Transactional
-    public Author findAuthor(String id) {
+    public Author findAuthor(Integer id) {
         final Author author = em.find(Author.class, id);
         author.getBooks(); // calling inside tx to load
         return author;
@@ -47,7 +47,7 @@ public class BookstoreService {
     }
 
     @Transactional
-    public boolean deleteBook(String bookId) {
+    public boolean deleteBook(Integer bookId) {
         Book book = findBook(bookId);
 
         if (book == null) {

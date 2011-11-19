@@ -193,14 +193,14 @@ public class BookstoreCrudTest {
 
     @After
     public void tearDown() throws Exception {
-        Set<String> ids = new HashSet<String>();
+        Set<Integer> ids = new HashSet<Integer>();
         for (Persistable p : createdEntities) {
             if (null != p.getId()) {
                 ids.add(p.getId());
             }
         }
 
-        connector.getConnection().delete(ids.toArray(new String[ids.size()]));
+//        connector.getConnection().delete(ids.toArray(new String[ids.size()]));
     }
 
     private <E extends Persistable> E register(E e) {
