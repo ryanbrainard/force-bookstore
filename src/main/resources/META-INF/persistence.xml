@@ -23,7 +23,7 @@
 		</properties>
 	</persistence-unit>
 
-    <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="hibernateHsqldb" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:unit-testing-jpa"/>
