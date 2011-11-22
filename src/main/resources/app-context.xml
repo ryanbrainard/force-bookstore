@@ -19,7 +19,7 @@
     </bean>
     
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="hibernateHsqldb" />
+        <property name="persistenceUnitName" value="nucleusHsqldb" />
     </bean>
 
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />

@@ -4,4 +4,4 @@
 .springBeans
 target
 .idea
-.iml
+*.iml
