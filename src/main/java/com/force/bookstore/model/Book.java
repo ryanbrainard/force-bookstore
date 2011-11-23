@@ -3,6 +3,7 @@ package com.force.bookstore.model;
 import com.force.bookstore.service.Persistable;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author rbrainard
@@ -23,6 +24,9 @@ public class Book implements Persistable {
 
     @ManyToOne
     private Author author;
+
+    @OneToMany(mappedBy = "book")
+    private Set<Chapter> chapters;
 
 
     public Book() {
@@ -95,5 +99,13 @@ public class Book implements Persistable {
 
     public boolean wasPostLoadHookCalled() {
         return postLoadHookCalled;
+    }
+
+    public Set<Chapter> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(Set<Chapter> chapters) {
+        this.chapters = chapters;
     }
 }
