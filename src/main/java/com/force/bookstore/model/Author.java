@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 public class Author implements Persistable {
 
-    @Transient private boolean posLoadHookCalled;
+    @Transient private boolean postLoadHookCalled;
     @Transient private boolean prePersistCalled;
 
     @Id
@@ -29,6 +29,9 @@ public class Author implements Persistable {
 
     @OneToMany(mappedBy = "author")
     private Set<Book> books;
+
+    public Author() {
+    }
 
     public Set<Book> getBooks() {
         return books;
@@ -81,13 +84,11 @@ public class Author implements Persistable {
     @PrePersist
     public void prePersist() {
         prePersistCalled = true;
-        System.out.println("PRE PERSIST CALLBACK ON AUTHOR");
     }
-
 
     @PostLoad
     public void postLoad() {
-        posLoadHookCalled = true;
+        postLoadHookCalled = true;
         System.out.println("POST LOAD CALLBACK ON AUTHOR");
     }
 
@@ -96,6 +97,6 @@ public class Author implements Persistable {
     }
 
     public boolean wasPostLoadHookCalled() {
-        return posLoadHookCalled;
+        return postLoadHookCalled;
     }
 }
