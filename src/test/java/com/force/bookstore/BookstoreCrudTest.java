@@ -96,7 +96,7 @@ public class BookstoreCrudTest {
         book.setAuthor(author);
         bookstore.save(book);
 
-        final Author directlyLoadedAuthor = txFind(Author.class, author.getId());
+        final Author directlyLoadedAuthor = em.find(Author.class, author.getId());
         assertTrue(directlyLoadedAuthor.wasPostLoadHookCalled());
     }
 
@@ -109,7 +109,7 @@ public class BookstoreCrudTest {
         book.setAuthor(author);
         bookstore.save(book);
 
-        final Book directlyLoadedBook = txFind(Book.class, book.getId());
+        final Book directlyLoadedBook = em.find(Book.class, book.getId());
         assertTrue(directlyLoadedBook.wasPostLoadHookCalled());
         assertTrue(directlyLoadedBook.getAuthor().wasPostLoadHookCalled());
     }
