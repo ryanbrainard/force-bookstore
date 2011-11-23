@@ -27,6 +27,9 @@ public class Author implements Persistable {
     private String lastName;
     private Date birthDate;
 
+    public Author() {
+    }
+
     @OneToMany(mappedBy = "author")
     private Set<Book> books;
 
@@ -87,6 +90,9 @@ public class Author implements Persistable {
 
     @PostLoad
     public void postLoad() {
+        assert id != null : "id should not be null when post load hook is called";
+        assert lastName != null : "last name should not be null when post load hook is called";
+
         posLoadHookCalled = true;
         System.out.println("POST LOAD CALLBACK ON AUTHOR");
     }

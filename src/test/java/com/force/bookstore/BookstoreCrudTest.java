@@ -96,7 +96,7 @@ public class BookstoreCrudTest {
         book.setAuthor(author);
         bookstore.save(book);
 
-        final Author directlyLoadedAuthor = txFind(Author.class, author.getId());
+        final Author directlyLoadedAuthor = em.find(Author.class, author.getId());
         assertTrue(directlyLoadedAuthor.wasPostLoadHookCalled());
     }
 
@@ -109,7 +109,8 @@ public class BookstoreCrudTest {
         book.setAuthor(author);
         bookstore.save(book);
 
-        final Book directlyLoadedBook = txFind(Book.class, book.getId());
+        System.out.print("---- ALL OBJECTS SAVED - ABOUT TO LOAD ----");
+        final Book directlyLoadedBook = em.find(Book.class, book.getId());
         assertTrue(directlyLoadedBook.wasPostLoadHookCalled());
         assertTrue(directlyLoadedBook.getAuthor().wasPostLoadHookCalled());
     }
@@ -193,13 +194,13 @@ public class BookstoreCrudTest {
 
     @After
     public void tearDown() throws Exception {
-        Set<Integer> ids = new HashSet<Integer>();
-        for (Persistable p : createdEntities) {
-            if (null != p.getId()) {
-                ids.add(p.getId());
-            }
-        }
-
+//        Set<String> ids = new HashSet<String>();
+//        for (Persistable p : createdEntities) {
+//            if (null != p.getId()) {
+//                ids.add(p.getId());
+//            }
+//        }
+//
 //        connector.getConnection().delete(ids.toArray(new String[ids.size()]));
     }
 

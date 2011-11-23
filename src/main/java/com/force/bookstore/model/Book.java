@@ -24,6 +24,9 @@ public class Book implements Persistable {
     @ManyToOne
     private Author author;
 
+    public Book() {
+    }
+
     public String getTitle() {
         return title;
     }
