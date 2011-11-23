@@ -126,6 +126,38 @@ DataNucleus + HSQLDB
 6. Author is queried: `SELECT A0.AUTHORUNIVERSALID,A0.BIRTHDATE,A0.FIRSTNAME,A0.LASTNAME FROM AUTHOR A0 WHERE A0.ID = <0>`
 7. Author.postLoad() called
 
+Callstack when `Book.author` is set:
+
+Signal Dispatcher@2388 daemon, prio=9, in group 'system', status: 'RUNNING'
+
+	  at com.force.bookstore.model.Book.jdoReplaceField(Book.java:-1)
+	  at com.force.bookstore.model.Book.jdoReplaceFields(Book.java:-1)
+	  at org.datanucleus.jdo.state.JDOStateManagerImpl.replaceFields(JDOStateManagerImpl.java:2983)
+	  at org.datanucleus.jdo.state.JDOStateManagerImpl.replaceFields(JDOStateManagerImpl.java:3003)
+	  at org.datanucleus.state.ObjectProviderImpl.replaceFields(ObjectProviderImpl.java:70)
+	  at org.datanucleus.store.rdbms.request.FetchRequest.execute(FetchRequest.java:345)
+	  at org.datanucleus.store.rdbms.RDBMSPersistenceHandler.fetchObject(RDBMSPersistenceHandler.java:307)
+	  at org.datanucleus.jdo.state.JDOStateManagerImpl.loadFieldsFromDatastore(JDOStateManagerImpl.java:2028)
+	  at org.datanucleus.jdo.state.JDOStateManagerImpl.validate(JDOStateManagerImpl.java:4528)
+	  at org.datanucleus.ObjectManagerImpl.findObject(ObjectManagerImpl.java:2809)
+	  at org.datanucleus.jpa.EntityManagerImpl.find(EntityManagerImpl.java:305)
+	  at com.force.sdk.jpa.ForceEntityManager.find(ForceEntityManager.java:294)
+	  at org.datanucleus.jpa.EntityManagerImpl.find(EntityManagerImpl.java:236)
+	  at sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:-1)
+	  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	  at java.lang.reflect.Method.invoke(Method.java:597)
+	  at org.springframework.orm.jpa.ExtendedEntityManagerCreator$ExtendedEntityManagerInvocationHandler.invoke(ExtendedEntityManagerCreator.java:365)
+	  at $Proxy30.find(Unknown Source:-1)
+	  at sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:-1)
+	  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	  at java.lang.reflect.Method.invoke(Method.java:597)
+	  at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:240)
+	  at $Proxy30.find(Unknown Source:-1)
+	  at com.force.bookstore.BookstoreCrudTest.testAuthorPostLoadHook_IndirectlyLoadAuthorViaBook(BookstoreCrudTest.java:113)
+
+
 Callstack when `Book.postLoad()` is called:
 
 	  at com.force.bookstore.model.Book.postLoad(Book.java:60)
