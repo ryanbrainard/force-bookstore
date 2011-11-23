@@ -109,6 +109,7 @@ public class BookstoreCrudTest {
         book.setAuthor(author);
         bookstore.save(book);
 
+        System.out.print("---- ALL OBJECTS SAVED - ABOUT TO LOAD ----");
         final Book directlyLoadedBook = em.find(Book.class, book.getId());
         assertTrue(directlyLoadedBook.wasPostLoadHookCalled());
         assertTrue(directlyLoadedBook.getAuthor().wasPostLoadHookCalled());

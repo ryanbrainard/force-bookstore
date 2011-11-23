@@ -24,6 +24,10 @@ public class Book implements Persistable {
     @ManyToOne
     private Author author;
 
+
+    public Book() {
+    }
+
     public String getTitle() {
         return title;
     }
@@ -51,9 +55,7 @@ public class Book implements Persistable {
     @PrePersist
     public void prePersist() {
         prePersistCalled = true;
-        System.out.println("PRE PERSIST CALLBACK ON BOOK");
     }
-
 
     @PostLoad
     public void postLoad() {
