@@ -25,4 +25,8 @@ public class Chapter implements Persistable {
     public void setBook(Book book) {
         this.book = book;
     }
+
+    public Book getBook() {
+        return book;
+    }
 }

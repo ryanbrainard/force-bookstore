@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Service
 public class BookstoreService {
@@ -32,6 +34,19 @@ public class BookstoreService {
         final Author author = em.find(Author.class, id);
         author.getBooks(); // calling inside tx to load
         return author;
+    }
+
+    @Transactional
+    public Author queryAuthor(String id) {
+        final String jpql = "SELECT a FROM Author a  WHERE a.id = '%s'";
+        final TypedQuery<Author> query = em.createQuery(String.format(jpql, id), Author.class);
+        final List<Author> resultList = query.getResultList();
+
+        if (resultList.isEmpty()) {
+            throw new IllegalArgumentException(id + " not found");
+        }
+
+        return resultList.get(0);
     }
 
     @Transactional
