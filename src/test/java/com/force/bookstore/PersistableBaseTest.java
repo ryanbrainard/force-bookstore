@@ -5,6 +5,9 @@ import com.force.bookstore.service.BookstoreService;
 import com.force.bookstore.service.Persistable;
 import com.force.sdk.connector.ForceServiceConnector;
 import org.junit.After;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Transactional;
@@ -19,6 +22,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author rbrainard
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/app-context.xml")
 public abstract class PersistableBaseTest {
     public static final String AUTHOR_FIRST_NAME = "John";
     public static final String AUTHOR_LAST_NAME = "Steinbeck";

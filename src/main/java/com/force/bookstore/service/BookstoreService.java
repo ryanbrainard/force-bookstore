@@ -46,6 +46,8 @@ public class BookstoreService {
             throw new IllegalArgumentException(id + " not found");
         }
 
+        resultList.get(0).getBooks(); // calling inside tx to load
+
         return resultList.get(0);
     }
 

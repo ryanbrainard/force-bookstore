@@ -6,18 +6,16 @@ import com.force.bookstore.model.Chapter;
 import com.sforce.soap.partner.sobject.SObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.jdo.JDODetachedFieldAccessException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/app-context.xml")
+
 public class BookstoreQueryTest extends PersistableBaseTest {
 
     private Author author;
@@ -81,29 +79,40 @@ public class BookstoreQueryTest extends PersistableBaseTest {
     }
 
     @Test
-    public void testJpqlChildren() throws Exception {
+    public void testJpqlChildren_NonTransactional() throws Exception {
         final String jpql = "SELECT a FROM Author a  WHERE a.id = '%s'";
         final TypedQuery<Author> query = em.createQuery(String.format(jpql, author.getId()), Author.class);
         final List<Author> resultList = query.getResultList();
         assertEquals(author.getId(), resultList.get(0).getId());
-        assertEquals(book.getId(), resultList.get(0).getBooks().iterator().next().getId());
+
+        try {
+            resultList.get(0).getBooks().iterator().next().getId();
+            fail();
+        } catch (JDODetachedFieldAccessException e) {
+            // expected because not in a transaction
+        }
     }
 
     @Test
-    public void testFindChildren() throws Exception {
+    public void testFindChildren_NonTransactional() throws Exception {
         final Author foundAuthor = em.find(Author.class, author.getId());
-        assertEquals(book.getId(), foundAuthor.getBooks().iterator().next().getId());
+        try {
+            foundAuthor.getBooks().iterator().next().getId();
+            fail();
+        } catch (JDODetachedFieldAccessException e) {
+            // expected because not in a transaction
+        }
     }
 
     @Test
-    public void testJpqlChildren_Service() throws Exception {
+    public void testJpqlChildren_Transactional() throws Exception {
         final Author queriedAuthor = bookstore.queryAuthor(author.getId());
         assertEquals(author.getId(), queriedAuthor.getId());
         assertEquals(book.getId(), queriedAuthor.getBooks().iterator().next().getId());
     }
 
     @Test
-    public void testFindChildren_Service() throws Exception {
+    public void testFindChildren_Transactional() throws Exception {
         final Author foundAuthor = bookstore.findAuthor(author.getId());
         assertEquals(book.getId(), foundAuthor.getBooks().iterator().next().getId());
     }
