@@ -17,6 +17,10 @@
 	<logger name="com.force.bookstore.controller">
 		<level value="info" />
 	</logger>
+
+    <logger name="com.force">
+        <level value="debug"/>
+    </logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">

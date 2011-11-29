@@ -3,6 +3,7 @@ package com.force.bookstore;
 import com.force.bookstore.model.Author;
 import com.force.bookstore.model.Book;
 import com.force.bookstore.model.Chapter;
+import com.force.bookstore.model.Part;
 import com.sforce.soap.partner.sobject.SObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,9 @@ import static org.junit.Assert.fail;
 public class BookstoreQueryTest extends PersistableBaseTest {
 
     private Author author;
+    private Author editor;
     private Book book;
+    private Part part;
     private Chapter chapter;
 
     @Before
@@ -29,13 +32,23 @@ public class BookstoreQueryTest extends PersistableBaseTest {
         author.setLastName(AUTHOR_LAST_NAME);
         bookstore.save(author);
 
+        editor = register(new Author());
+        editor.setLastName("EDITOR");
+        bookstore.save(editor);
+
         book = register(new Book());
         book.setAuthor(author);
         book.setTitle(TITLE_1);
         bookstore.save(book);
 
+        part = register(new Part());
+        part.setBook(book);
+        bookstore.save(part);
+
         chapter = register(new Chapter());
         chapter.setBook(book);
+        chapter.setPart(part);
+        chapter.setEditor(editor);
         bookstore.save(chapter);
     }
 
@@ -85,10 +98,42 @@ public class BookstoreQueryTest extends PersistableBaseTest {
     }
 
     @Test
-    public void testJpqlParents_TransactionalWithRefresh() throws Exception {
-//        final TypedQuery<Chapter> query = em.createQuery("SELECT c FROM Chapter c  WHERE c.id = :chapterId", Chapter.class);
-//        query.setParameter("chapterId", chapter.getId());
+    public void testJpqlMultipleParents() throws Exception {
+        final String jpql = "SELECT c FROM Chapter c  WHERE c.id = '%s'";
+        final TypedQuery<Chapter> query = em.createQuery(String.format(jpql, chapter.getId()), Chapter.class);
+        final List<Chapter> resultList = query.getResultList();
+        assertEquals(chapter.getId(), resultList.get(0).getId());
+        assertEquals(book.getId(), resultList.get(0).getBook().getId());
+        assertEquals(book.getTitle(), resultList.get(0).getBook().getTitle());
+        assertEquals(book.getTitle(), TITLE_1);
+        assertEquals(author.getLastName(), resultList.get(0).getBook().getAuthor().getLastName());
+        assertEquals(author.getLastName(), AUTHOR_LAST_NAME);
 
+        assertEquals(editor.getId(), resultList.get(0).getEditor().getId());
+        assertEquals(part.getId(), resultList.get(0).getPart().getId());
+        assertEquals(part.getBook().getId(), resultList.get(0).getPart().getBook().getId());
+        assertEquals(part.getBook().getAuthor().getId(), resultList.get(0).getPart().getBook().getAuthor().getId());
+    }
+
+    @Test
+    public void testJpqlMultipleParents_TransactionalWithRefresh() throws Exception {
+        final String jpql = "SELECT c FROM Chapter c  WHERE c.id = '%s'";
+        final List<Chapter> resultList = bookstore.queryAndRefresh(String.format(jpql, chapter.getId()), Chapter.class);
+        assertEquals(chapter.getId(), resultList.get(0).getId());
+        assertEquals(book.getId(), resultList.get(0).getBook().getId());
+        assertEquals(book.getTitle(), resultList.get(0).getBook().getTitle());
+        assertEquals(book.getTitle(), TITLE_1);
+        assertEquals(author.getLastName(), resultList.get(0).getBook().getAuthor().getLastName());
+        assertEquals(author.getLastName(), AUTHOR_LAST_NAME);
+
+        assertEquals(editor.getId(), resultList.get(0).getEditor().getId());
+        assertEquals(part.getId(), resultList.get(0).getPart().getId());
+        assertEquals(part.getBook().getId(), resultList.get(0).getPart().getBook().getId());
+        assertEquals(part.getBook().getAuthor().getId(), resultList.get(0).getPart().getBook().getAuthor().getId());
+    }
+
+    @Test
+    public void testJpqlParents_TransactionalWithRefresh() throws Exception {
         final String jpql = "SELECT c FROM Chapter c  WHERE c.id = '%s'";
         final List<Chapter> resultList = bookstore.queryAndRefresh(String.format(jpql, chapter.getId()), Chapter.class);
 
