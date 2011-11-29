@@ -10,6 +10,7 @@ import org.junit.Test;
 import javax.jdo.JDODetachedFieldAccessException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -25,10 +26,12 @@ public class BookstoreQueryTest extends PersistableBaseTest {
     @Before
     public void setUp() {
         author = register(new Author());
+        author.setLastName(AUTHOR_LAST_NAME);
         bookstore.save(author);
 
         book = register(new Book());
         book.setAuthor(author);
+        book.setTitle(TITLE_1);
         bookstore.save(book);
 
         chapter = register(new Chapter());
@@ -73,6 +76,31 @@ public class BookstoreQueryTest extends PersistableBaseTest {
         final String jpql = "SELECT c FROM Chapter c  WHERE c.id = '%s'";
         final TypedQuery<Chapter> query = em.createQuery(String.format(jpql, chapter.getId()), Chapter.class);
         final List<Chapter> resultList = query.getResultList();
+        assertEquals(chapter.getId(), resultList.get(0).getId());
+        assertEquals(book.getId(), resultList.get(0).getBook().getId());
+        assertEquals(book.getTitle(), resultList.get(0).getBook().getTitle());
+        assertEquals(book.getTitle(), TITLE_1);
+        assertEquals(author.getLastName(), resultList.get(0).getBook().getAuthor().getLastName());
+        assertEquals(author.getLastName(), AUTHOR_LAST_NAME);
+    }
+
+    @Test
+    public void testJpqlParents_TransactionalWithRefresh() throws Exception {
+//        final TypedQuery<Chapter> query = em.createQuery("SELECT c FROM Chapter c  WHERE c.id = :chapterId", Chapter.class);
+//        query.setParameter("chapterId", chapter.getId());
+
+        final String jpql = "SELECT c FROM Chapter c  WHERE c.id = '%s'";
+        final List<Chapter> resultList = bookstore.queryAndRefresh(String.format(jpql, chapter.getId()), Chapter.class);
+
+        assertEquals(chapter.getId(), resultList.get(0).getId());
+        assertEquals(book.getId(), resultList.get(0).getBook().getId());
+        assertEquals(author.getId(), resultList.get(0).getBook().getAuthor().getId());
+    }
+
+    @Test
+    public void testFindParents_TransactionalWithRefresh() throws Exception {
+        final List<Chapter> resultList = Arrays.asList(bookstore.findAndRefresh(chapter.getId(), Chapter.class));
+
         assertEquals(chapter.getId(), resultList.get(0).getId());
         assertEquals(book.getId(), resultList.get(0).getBook().getId());
         assertEquals(author.getId(), resultList.get(0).getBook().getAuthor().getId());

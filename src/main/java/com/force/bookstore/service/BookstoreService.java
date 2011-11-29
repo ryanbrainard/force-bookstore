@@ -74,4 +74,20 @@ public class BookstoreService {
         em.remove(book);
         return true;
     }
+
+    @Transactional
+    public <P extends Persistable> List<P> queryAndRefresh(String jpql, Class<P> entityClass) {
+        final List<P> resultList = em.createQuery(jpql, entityClass).getResultList();
+        for (P p : resultList) {
+            em.refresh(p);
+        }
+        return resultList;
+    }
+
+    @Transactional
+    public <P extends Persistable> P findAndRefresh(String id, Class<P> entityClass) {
+        final P p = em.find(entityClass, id);
+        em.refresh(p);
+        return p;
+    }
 }
