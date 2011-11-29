@@ -113,6 +113,28 @@ public class BookstoreQueryTest extends PersistableBaseTest {
         assertEquals(part.getId(), resultList.get(0).getPart().getId());
         assertEquals(part.getBook().getId(), resultList.get(0).getPart().getBook().getId());
         assertEquals(part.getBook().getAuthor().getId(), resultList.get(0).getPart().getBook().getAuthor().getId());
+
+        /*
+
+         Failing because part__r.book__r.author__r is never loaded
+
+         select id,
+         book__r.author__r.authorUniversalId__c,
+         book__r.author__r.birthDate__c,
+         book__r.author__r.firstName__c,
+         book__r.author__r.Id,
+         book__r.author__r.lastName__c,
+         book__r.Id,
+         book__r.title__c,
+         editor__r.authorUniversalId__c,
+         editor__r.birthDate__c,
+         editor__r.firstName__c,
+         editor__r.Id,
+         editor__r.lastName__c,
+         part__r.book__r.Id,
+         part__r.book__r.title__c,
+         part__r.Id from Chapter__c c  where (c.Id = 'a03U0000001GKRPIA4')
+          */
     }
 
     @Test
