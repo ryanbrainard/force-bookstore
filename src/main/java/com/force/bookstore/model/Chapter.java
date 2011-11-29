@@ -18,9 +18,6 @@ public class Chapter implements Persistable {
     private Book book;
 
     @ManyToOne
-    private Author editor;
-
-    @ManyToOne
     private Part part;
 
     public Chapter() {
@@ -37,14 +34,6 @@ public class Chapter implements Persistable {
 
     public Book getBook() {
         return book;
-    }
-
-    public void setEditor(Author editor) {
-        this.editor = editor;
-    }
-
-    public Author getEditor() {
-        return editor;
     }
 
     public Part getPart() {
