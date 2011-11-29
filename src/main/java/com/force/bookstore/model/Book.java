@@ -25,6 +25,9 @@ public class Book implements Persistable {
     @ManyToOne
     private Author author;
 
+    @ManyToOne
+    private Author ghostWriter;
+
     @OneToMany(mappedBy = "book")
     private Set<Chapter> chapters;
 
@@ -107,5 +110,13 @@ public class Book implements Persistable {
 
     public void setChapters(Set<Chapter> chapters) {
         this.chapters = chapters;
+    }
+
+    public Author getGhostWriter() {
+        return ghostWriter;
+    }
+
+    public void setGhostWriter(Author ghostWriter) {
+        this.ghostWriter = ghostWriter;
     }
 }

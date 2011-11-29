@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 public class BookstoreQueryTest extends PersistableBaseTest {
 
     private Author author;
+    private Author ghostWriter;
     private Book book;
     private Part part;
     private Chapter chapter;
@@ -31,8 +32,13 @@ public class BookstoreQueryTest extends PersistableBaseTest {
         author.setLastName(AUTHOR_LAST_NAME);
         bookstore.save(author);
 
+        ghostWriter = register(new Author());
+        ghostWriter.setLastName("CASPER");
+        bookstore.save(ghostWriter);
+
         book = register(new Book());
         book.setAuthor(author);
+        book.setGhostWriter(ghostWriter);
         book.setTitle(TITLE_1);
         bookstore.save(book);
 
@@ -176,6 +182,21 @@ public class BookstoreQueryTest extends PersistableBaseTest {
         } catch (JDODetachedFieldAccessException e) {
             // expected because not in a transaction
         }
+    }
+
+
+    @Test
+    public void testJpqlMultipleParentsOfSameType() throws Exception {
+        final String jpql = "SELECT b FROM Book b  WHERE b.id = '%s'";
+        final Book queriedBook = bookstore.queryAndRefresh(String.format(jpql, book.getId()), Book.class).get(0);
+
+        assertEquals(book.getId(), book.getId());
+
+        assertEquals(author.getId(), book.getAuthor().getId());
+        assertEquals(author.getLastName(), book.getAuthor().getLastName());
+
+        assertEquals(ghostWriter.getId(), book.getGhostWriter().getId());
+        assertEquals(ghostWriter.getLastName(), book.getGhostWriter().getLastName());
     }
 
     @Test
